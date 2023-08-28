@@ -7,16 +7,47 @@ use Illuminate\Http\Request;
 
 class MoviesController extends Controller
 {
-    public function index()
+
+    public function __construct()
     {
-        $movies = Movie::all();
-        return response()->json(['movies' => $movies], 200);
+        $this->middleware('auth'); // Require authentication for all methods
+        $this->middleware('can:manage-movies')->only(['index', 'store', 'update', 'destroy']);
+    } 
+
+    public function create()
+    {
+        return view('movies.create'); // Create a 'create.blade.php' view file
     }
+
+    public function edit($id)
+    {
+        $movie = Movie::findOrFail($id);
+        return view('movies.edit', compact('movie'));
+    }
+
+    public function indexUser(Request $request)
+    {
+        $genres = Movie::pluck('genre')->unique();
+
+        $query = Movie::query();
+    
+        if ($request->has('genre')) {
+            $genre = $request->input('genre');
+            if ($genre !== '') {
+                $query->where('genre', $genre);
+            }
+        }
+    
+        $movies = $query->paginate(12);
+    
+        return view('movies.index', compact('movies', 'genres'));
+    }
+
 
     public function show($id)
     {
         $movie = Movie::findOrFail($id);
-        return response()->json(['movie' => $movie], 200);
+        return view('movies.show', compact('movie'));
     }
 
     public function store(Request $request)
@@ -31,9 +62,12 @@ class MoviesController extends Controller
             'poster_url' => 'nullable|url',
             'trailer_url' => 'nullable|url',
         ]);
+        $movieData = $request->except('_token'); // Exclude the CSRF token
+        $movie = Movie::create($movieData);
+        dd( $request->except('_token'));
 
-        $movie = Movie::create($request->all());
-        return response()->json(['message' => 'Movie created successfully.', 'movie' => $movie], 201);
+        // $movie = Movie::create($request->all());
+        return redirect()->route('movies.index')->with('success', 'Movie created successfully.');
     }
 
     public function update(Request $request, $id)
@@ -51,13 +85,13 @@ class MoviesController extends Controller
 
         $movie = Movie::findOrFail($id);
         $movie->update($request->all());
-        return response()->json(['message' => 'Movie updated successfully.', 'movie' => $movie], 200);
+        return redirect()->route('movies.index')->with('success', 'Movie updated successfully.');
     }
 
     public function destroy($id)
     {
         $movie = Movie::findOrFail($id);
         $movie->delete();
-        return response()->json(['message' => 'Movie deleted successfully.'], 204);
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');
     }
 }

@@ -10,6 +10,14 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+import 'toastr/build/toastr.min.css';
+import toastr from 'toastr/build/toastr.min.js';
+toastr.options = {
+    positionClass: 'toast-top-right',
+    // Other default options
+};
+window.toastr = toastr;
+
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

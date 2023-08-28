@@ -37,12 +37,14 @@ class User extends Authenticatable
 		]
 	];
 	
+    const ADMIN_ROLE = 1;
+    const USER_ROLE = 2;
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    public function isAdmin()
+    {
+        return $this->role === self::ADMIN_ROLE;
+    }
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];

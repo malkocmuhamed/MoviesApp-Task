@@ -7,11 +7,28 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    // ...
-    public function index()
+    public function __construct()
     {
-        $users = User::all();
-        return response()->json(['users' => $users], 200);
+        $this->middleware('auth'); // Require authentication for all methods
+        $this->middleware('can:manage-movies')->only(['index', 'store', 'update', 'destroy']);
+    }
+
+    public function index(Request $request)
+    {
+        $users = User::paginate(8);
+    
+        return view('users.index', compact('users'));
+    }    
+
+    public function create()
+    {
+        return view('users.create'); // Create a 'create.blade.php' view file
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('users.edit', compact('user'));
     }
 
     public function store(Request $request)
@@ -20,14 +37,31 @@ class UsersController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'role' => 'required'
         ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
+        $user = User::create($request->all());
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'role' => 'required'
         ]);
 
-        return response()->json(['message' => 'User created successfully.', 'user' => $user], 201);
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    }
+    
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }
