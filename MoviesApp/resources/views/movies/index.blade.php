@@ -20,11 +20,12 @@
                     @foreach ($movies as $movie)
                         <div class="col-md-3 mb-3">
                             <div class="card">
-                                <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="card-img-top">
+                                <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="card-img-top"
+                                    style="height:330px">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $movie->title }}</h5>
                                     <p class="card-text">{{ $movie->genre }}</p>
-                                    <a href="{{ route('movies.show', $movie->id) }}" class="btn btn-primary">Details</a>
+                                    <a href="{{ route('movies.show', $movie->slug) }}" class="btn btn-primary">Details</a>
                                 </div>
                             </div>
                         </div>

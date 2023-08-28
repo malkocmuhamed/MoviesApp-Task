@@ -5,7 +5,7 @@ use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('movies');
+    return view('home');
 });
 
 Auth::routes();
@@ -31,6 +31,6 @@ Route::middleware(['auth', 'role:' . 1])->group(function () {
 
 Route::middleware(['auth', 'role:' . 2])->group(function () {
     Route::get('/movies', [MoviesController::class, 'indexUser'])->name('movies.index');
-    Route::get('/movies/{id}', [MoviesController::class, 'show'])->name('movies.show');
+    Route::get('/movies/{slug}', [MoviesController::class, 'show'])->name('movies.show');
 });
 

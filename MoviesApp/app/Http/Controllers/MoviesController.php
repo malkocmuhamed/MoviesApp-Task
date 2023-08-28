@@ -44,9 +44,9 @@ class MoviesController extends Controller
     }
 
 
-    public function show($id)
+    public function show($slug)
     {
-        $movie = Movie::findOrFail($id);
+        $movie = Movie::where('slug', $slug)->firstOrFail();
         return view('movies.show', compact('movie'));
     }
 
@@ -66,7 +66,6 @@ class MoviesController extends Controller
         $movie = Movie::create($movieData);
         dd( $request->except('_token'));
 
-        // $movie = Movie::create($request->all());
         return redirect()->route('movies.index')->with('success', 'Movie created successfully.');
     }
 
