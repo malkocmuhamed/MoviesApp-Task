@@ -21,7 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', 'UsersController@index');
     Route::resource('movies', MoviesController::class);
     Route::resource('users', UsersController::class);
-    Route::post('/reviews', [ReviewController::class, 'store']);
 });
 
 Route::middleware(['auth', 'role:' . 1])->group(function () {
@@ -39,6 +38,9 @@ Route::middleware(['auth', 'role:' . 1])->group(function () {
 Route::middleware(['auth', 'role:' . 2])->group(function () {
     Route::get('/movies', 'MoviesController@indexUser')->name('movies.index');
     Route::get('/movies/{id}', 'MoviesController@show')->name('movies.show');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
