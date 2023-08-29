@@ -41,8 +41,16 @@
 
 @can('manage-movies')
 @section('content')
+    @if(session('success'))
+    <div id="flash-message" class="alert alert-success" data-auto-dismiss="5000"
+        style="width:50%; margin:auto;">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="p-5">
+    <div style="display:flex; justify-content:center;">
     <a href="{{ route('users.index') }}" class="btn btn-primary" style="float:right; margin-right: 10px;">Manage Users</a>
+    </div>
         <h2>Manage Movies</h2>
         <a href="{{ route('movies.create') }}" class="btn btn-primary" style="float:right">Create Movie</a>
         <table class="table">
@@ -80,15 +88,8 @@
         {{ $movies->links() }}
         </div>
     </div>
-    @if(session('success'))
-    <div id="flash-message" class="alert alert-success" data-auto-dismiss="5000"
-        style="width:50%; margin:auto">
-        {{ session('success') }}
-    </div>
-    @endif
 @endsection
 @endcan
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -103,7 +104,6 @@
     });
 </script>
 
-@section('content')
 <style>
     .alert {
         transition: opacity 0.5s ease-out;
@@ -114,4 +114,3 @@
         display: none;
     }
 </style>
-@endsection

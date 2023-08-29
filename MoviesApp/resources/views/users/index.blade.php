@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session('success'))
+    <div id="flash-message" class="alert alert-success" data-auto-dismiss="5000"
+        style="width:50%; margin:auto">
+        {{ session('success') }}
+    </div>
+    @endif
     <div class="p-5">
         <h2>Manage Users</h2>
         <a href="{{ route('users.create') }}" class="btn btn-primary" style="float:right">Create User</a>
@@ -35,10 +41,28 @@
         {{ $users->links() }}
         </div>
     </div>
-    @if(session('success'))
-    <div id="flash-message" class="alert alert-success" data-auto-dismiss="5000"
-        style="width:50%; margin:auto">
-        {{ session('success') }}
-    </div>
-    @endif
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const flashMessage = document.getElementById('flash-message');
+
+        if (flashMessage) {
+            const autoDismissTime = flashMessage.getAttribute('data-auto-dismiss');
+            setTimeout(function () {
+                flashMessage.classList.add('hidden');
+            }, autoDismissTime);
+        }
+    });
+</script>
+
+<style>
+    .alert {
+        transition: opacity 0.5s ease-out;
+    }
+
+    .alert.hidden {
+        opacity: 0;
+        display: none;
+    }
+</style>
