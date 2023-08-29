@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,6 +14,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/movies', [MoviesController::class, 'index'])->name('movies.index');
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 Route::middleware(['auth', 'role:' . 1])->group(function () {
     Route::get('/movies', [MoviesController::class, 'index'])->name('movies.index');

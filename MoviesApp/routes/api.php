@@ -2,14 +2,15 @@
 
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('api')->group(function () {
     Route::post('/login', 'Auth\LoginController@login');
     Route::post('/logout', 'Auth\LoginController@logout');
-    Route::post('/password/reset', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-    Route::post('/password/reset/{token}', 'Auth\ResetPasswordController@reset');
+    Route::post('/password/reset', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::post('/password/reset/{token}', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 Route::post('/register', 'Auth\RegisterController@register');
