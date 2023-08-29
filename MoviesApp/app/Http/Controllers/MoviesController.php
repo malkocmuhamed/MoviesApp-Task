@@ -64,7 +64,6 @@ class MoviesController extends Controller
         ]);
         $movieData = $request->except('_token'); // Exclude the CSRF token
         $movie = Movie::create($movieData);
-        dd( $request->except('_token'));
 
         return redirect()->route('movies.index')->with('success', 'Movie created successfully.');
     }
