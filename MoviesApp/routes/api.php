@@ -3,6 +3,7 @@
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', 'UsersController@index');
     Route::resource('movies', MoviesController::class);
     Route::resource('users', UsersController::class);
+    Route::post('/reviews', [ReviewController::class, 'store']);
 });
 
 Route::middleware(['auth', 'role:' . 1])->group(function () {

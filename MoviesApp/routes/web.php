@@ -3,6 +3,7 @@
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\ReviewController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -38,5 +39,9 @@ Route::middleware(['auth', 'role:' . 1])->group(function () {
 Route::middleware(['auth', 'role:' . 2])->group(function () {
     Route::get('/movies', [MoviesController::class, 'indexUser'])->name('movies.index');
     Route::get('/movies/{slug}', [MoviesController::class, 'show'])->name('movies.show');
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 

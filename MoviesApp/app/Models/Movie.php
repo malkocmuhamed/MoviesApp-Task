@@ -39,4 +39,10 @@ class Movie extends Model
             $movie->slug = Str::slug($movie->title);
         });
     }
+    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }
